@@ -7,34 +7,36 @@
     <title>Sales Tax Calculator</title>
 </head>
 <body>
-    <div class="calculator">
-        <h1>Sales Tax Calculator</h1>
-        <form id="taxForm">
-            <label for="price">Price: $</label>
-            <input type="number" id="price" required>
-            <label for="taxRate">Sales Tax: %</label>
-            <input type="number" id="taxRate" required>
-            <div class="buttons">
-                <button type="button" onclick="clearFields()">Clear</button>
-                <button type="button" onclick="calculateSalesTax()">Calculate</button>
+    <div class="calculator-container">
+        <div class="calculator">
+            <h1>Sales Tax Calculator</h1>
+            <form id="taxForm">
+                <label for="price">Price: $</label>
+                <input type="number" id="price" required>
+                <label for="taxRate">Sales Tax: %</label>
+                <input type="number" id="taxRate" required>
+                <div class="buttons">
+                    <button type="button" onclick="clearFields()">Clear</button>
+                    <button type="button" onclick="calculateSalesTax()">Calculate</button>
+                </div>
+            </form>
+            <div id="result">
+                <h2>Answer:</h2>
+                <table>
+                    <tr>
+                        <td>Price:</td>
+                        <td id="priceValue">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Sales Tax (<span id="taxRateValue">0</span>%):</td>
+                        <td id="taxValue">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Total:</td>
+                        <td id="totalValue">$0.00</td>
+                    </tr>
+                </table>
             </div>
-        </form>
-        <div id="result">
-            <h2>Answer:</h2>
-            <table>
-                <tr>
-                    <td>Price:</td>
-                    <td id="priceValue">$0.00</td>
-                </tr>
-                <tr>
-                    <td>Sales Tax (<span id="taxRateValue">0</span>%):</td>
-                    <td id="taxValue">$0.00</td>
-                </tr>
-                <tr>
-                    <td>Total:</td>
-                    <td id="totalValue">$0.00</td>
-                </tr>
-            </table>
         </div>
     </div>
     <script src="calculator.js"></script>

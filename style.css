@@ -1,11 +1,19 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f9;
-    margin: 0;
+}
+
+.calculator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
 }
 
 .calculator {
@@ -13,7 +21,8 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
 }
 
@@ -71,4 +80,24 @@ td {
     padding: 5px;
     border-top: 1px solid #ccc;
     text-align: left;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .calculator {
+        width: 90%;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    button:last-child {
+        margin-bottom: 0;
+    }
 }
