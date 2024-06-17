@@ -105,6 +105,17 @@
             cursor: pointer;
         }
 
+        .add-price {
+            margin-bottom: 20px;
+            cursor: pointer;
+            color: #b22222;
+            font-weight: bold;
+        }
+
+        .add-price:hover {
+            text-decoration: underline;
+        }
+
         /* Responsive design */
         @media (max-width: 600px) {
             .calculator {
@@ -131,8 +142,11 @@
         <div class="calculator">
             <h1 id="title">Ely's Sales Tax Calculator</h1>
             <form id="taxForm">
-                <label for="price" id="priceLabel">Price: $</label>
-                <input type="number" id="price" required>
+                <div id="priceInputs">
+                    <label for="price0" class="priceLabel">Price: $</label>
+                    <input type="number" id="price0" class="price" oninput="updateTotalPrice()" required>
+                </div>
+                <div class="add-price" onclick="addPriceRow()">+ Add another price</div>
                 <label for="taxRate" id="taxRateLabel">Sales Tax: %</label>
                 <input type="number" id="taxRate" required>
                 <div class="buttons">
@@ -144,8 +158,8 @@
                 <h2 id="answerTitle">Answer:</h2>
                 <table>
                     <tr>
-                        <td id="priceResultLabel">Price:</td>
-                        <td id="priceValue">$0.00</td>
+                        <td id="totalPriceLabel">Total Price:</td>
+                        <td id="totalPriceValue">$0.00</td>
                     </tr>
                     <tr>
                         <td id="taxResultLabel">Sales Tax (<span id="taxRateValue">0</span>%):</td>
@@ -164,31 +178,65 @@
         </div>
     </div>
     <script>
+        let priceCount = 1;
+
         function calculateSalesTax() {
-            const price = parseFloat(document.getElementById('price').value);
+            const totalPrice = updateTotalPrice();
             const taxRate = parseFloat(document.getElementById('taxRate').value);
 
-            if (isNaN(price) || isNaN(taxRate)) {
+            if (isNaN(taxRate)) {
                 alert("Please enter valid numbers for both fields.");
                 return;
             }
 
-            const taxAmount = (price * taxRate) / 100;
-            const totalAmount = price + taxAmount;
+            const taxAmount = (totalPrice * taxRate) / 100;
+            const totalAmount = totalPrice + taxAmount;
 
-            document.getElementById('priceValue').innerText = `$${price.toFixed(2)}`;
             document.getElementById('taxRateValue').innerText = taxRate.toFixed(2);
             document.getElementById('taxValue').innerText = `$${taxAmount.toFixed(2)}`;
             document.getElementById('totalValue').innerText = `$${totalAmount.toFixed(2)}`;
         }
 
         function clearFields() {
-            document.getElementById('price').value = '';
+            for (let i = 0; i < priceCount; i++) {
+                document.getElementById('price' + i).value = '';
+            }
             document.getElementById('taxRate').value = '';
-            document.getElementById('priceValue').innerText = '$0.00';
+            document.getElementById('totalPriceValue').innerText = '$0.00';
             document.getElementById('taxRateValue').innerText = '0';
             document.getElementById('taxValue').innerText = '$0.00';
             document.getElementById('totalValue').innerText = '$0.00';
+        }
+
+        function addPriceRow() {
+            const priceInputs = document.getElementById('priceInputs');
+            const newLabel = document.createElement('label');
+            newLabel.setAttribute('for', 'price' + priceCount);
+            newLabel.classList.add('priceLabel');
+            newLabel.innerText = 'Price: $';
+            priceInputs.appendChild(newLabel);
+
+            const newInput = document.createElement('input');
+            newInput.setAttribute('type', 'number');
+            newInput.setAttribute('id', 'price' + priceCount);
+            newInput.classList.add('price');
+            newInput.oninput = updateTotalPrice;
+            newInput.required = true;
+            priceInputs.appendChild(newInput);
+
+            priceCount++;
+        }
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            for (let i = 0; i < priceCount; i++) {
+                const price = parseFloat(document.getElementById('price' + i).value);
+                if (!isNaN(price)) {
+                    totalPrice += price;
+                }
+            }
+            document.getElementById('totalPriceValue').innerText = `$${totalPrice.toFixed(2)}`;
+            return totalPrice;
         }
 
         function setLanguage(lang) {
@@ -200,9 +248,10 @@
                     clearButton: "Clear",
                     calculateButton: "Calculate",
                     answerTitle: "Answer:",
-                    priceResultLabel: "Price:",
+                    totalPriceLabel: "Total Price:",
                     taxResultLabel: "Sales Tax",
-                    totalResultLabel: "Total:"
+                    totalResultLabel: "Total:",
+                    addPrice: "+ Add another price"
                 },
                 es: {
                     title: "Calculadora de Impuestos de Ventas de Ely",
@@ -211,21 +260,23 @@
                     clearButton: "Limpiar",
                     calculateButton: "Calcular",
                     answerTitle: "Respuesta:",
-                    priceResultLabel: "Precio:",
+                    totalPriceLabel: "Precio Total:",
                     taxResultLabel: "Impuesto de Venta",
-                    totalResultLabel: "Total:"
+                    totalResultLabel: "Total:",
+                    addPrice: "+ Agregar otro precio"
                 }
             };
 
             document.getElementById('title').innerText = translations[lang].title;
-            document.getElementById('priceLabel').innerText = translations[lang].priceLabel;
+            document.querySelectorAll('.priceLabel').forEach(label => label.innerText = translations[lang].priceLabel);
             document.getElementById('taxRateLabel').innerText = translations[lang].taxRateLabel;
             document.querySelector('.btn:nth-child(1)').innerText = translations[lang].clearButton;
             document.querySelector('.btn:nth-child(2)').innerText = translations[lang].calculateButton;
             document.getElementById('answerTitle').innerText = translations[lang].answerTitle;
-            document.getElementById('priceResultLabel').innerText = translations[lang].priceResultLabel;
+            document.getElementById('totalPriceLabel').innerText = translations[lang].totalPriceLabel;
             document.getElementById('taxResultLabel').innerHTML = `${translations[lang].taxResultLabel} (<span id="taxRateValue">0</span>%):`;
             document.getElementById('totalResultLabel').innerText = translations[lang].totalResultLabel;
+            document.querySelector('.add-price').innerText = translations[lang].addPrice;
         }
 
         // Set default language to English
