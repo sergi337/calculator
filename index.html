@@ -3,8 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Sergio's Sales Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        h1 {
+            background-color: #b22222;
+            color: white;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            width: 45%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #b22222;
+            background-color: #b22222;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #a02020;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        td {
+            padding: 5px;
+            border-top: 1px solid #ccc;
+            text-align: left;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .calculator {
+                width: 90%;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .btn:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="calculator-container">
@@ -16,8 +125,8 @@
                 <label for="taxRate">Sales Tax: %</label>
                 <input type="number" id="taxRate" required>
                 <div class="buttons">
-                    <button type="button" onclick="clearFields()">Clear</button>
-                    <button type="button" onclick="calculateSalesTax()">Calculate</button>
+                    <button type="button" class="btn" onclick="clearFields()">Clear</button>
+                    <button type="button" class="btn" onclick="calculateSalesTax()">Calculate</button>
                 </div>
             </form>
             <div id="result">
@@ -39,6 +148,33 @@
             </div>
         </div>
     </div>
-    <script src="calculator.js"></script>
+    <script>
+        function calculateSalesTax() {
+            const price = parseFloat(document.getElementById('price').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value);
+
+            if (isNaN(price) || isNaN(taxRate)) {
+                alert("Please enter valid numbers for both fields.");
+                return;
+            }
+
+            const taxAmount = (price * taxRate) / 100;
+            const totalAmount = price + taxAmount;
+
+            document.getElementById('priceValue').innerText = `$${price.toFixed(2)}`;
+            document.getElementById('taxRateValue').innerText = taxRate.toFixed(2);
+            document.getElementById('taxValue').innerText = `$${taxAmount.toFixed(2)}`;
+            document.getElementById('totalValue').innerText = `$${totalAmount.toFixed(2)}`;
+        }
+
+        function clearFields() {
+            document.getElementById('price').value = '';
+            document.getElementById('taxRate').value = '';
+            document.getElementById('priceValue').innerText = '$0.00';
+            document.getElementById('taxRateValue').innerText = '0';
+            document.getElementById('taxValue').innerText = '$0.00';
+            document.getElementById('totalValue').innerText = '$0.00';
+        }
+    </script>
 </body>
 </html>
